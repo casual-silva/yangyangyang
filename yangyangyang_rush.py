@@ -5,6 +5,11 @@
 # @Author : Silva
 # @Time : 2022/9/17 下午9:11
 
+__desc__ = """
+github: https://github.com/casual-silva/yangyangyang
+羊了个羊一键通关源码>> 无限线程指定次数 无需抓包 谨慎使用 以防刷爆
+"""
+
 import copy
 import requests
 import traceback
@@ -12,6 +17,7 @@ from functools import wraps
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 requests.packages.urllib3.disable_warnings()
+
 
 headers = {
     'Host': 'cat-match.easygame2021.com',
@@ -51,7 +57,7 @@ def except_output(msg='异常', retry_num=10, is_while=True):
 
 @except_output(msg='fetch_wx_union_id', retry_num=5)
 def fetch_wx_union_id(user_id):
-    response = requests.get(f"https://cat-match.easygame2021.com/sheep/v1/game/user_info?uid={user_id}", verify=False, timeout=5, headers=headers)
+    response = requests.get(f"https://cat-match.easygame2021.com/sheep/v1/game/user_info?uid={user_id}", verify=False, timeout=3, headers=headers)
     print(response.json()['data'])
     wx_union_id = response.json()['data']['wx_open_id']
     return wx_union_id
@@ -60,7 +66,7 @@ def fetch_wx_union_id(user_id):
 def fetch_token(wx_union_id):
     tokenUrl = "https://cat-match.easygame2021.com/sheep/v1/user/login_tourist"
     data = {"uuid": wx_union_id}
-    res = requests.post(tokenUrl, data, verify=False, timeout=5).json()
+    res = requests.post(tokenUrl, data, verify=False, timeout=3).json()
     return res['data']['token']
 
 
@@ -111,7 +117,7 @@ class YangYang:
         __headers = copy.deepcopy(headers)
         __headers['t'] = t
         response = requests.get('https://cat-match.easygame2021.com/sheep/v1/game/game_over', params=params,
-                                headers=__headers, timeout=5, verify=False)
+                                headers=__headers, timeout=3, verify=False)
         print(response.text)
         self.sucess_num += 1
         print(f'牛哇！user_id:{self.user_id} 通关第: {self.sucess_num} 次成功！')
@@ -120,4 +126,4 @@ class YangYang:
             print('通关完成！')
 
 if __name__ == '__main__':
-    YangYang('xxxx', count=700).go_pass()
+    YangYang('xxxxx', count=700, max_workers=100).go_pass()
