@@ -51,7 +51,7 @@ def except_output(msg='异常', retry_num=10, is_while=True):
 
 @except_output(msg='fetch_wx_union_id', retry_num=5)
 def fetch_wx_union_id(user_id):
-    response = requests.get(f"https://cat-match.easygame2021.com/sheep/v1/game/user_info?uid={user_id}", headers=headers)
+    response = requests.get(f"https://cat-match.easygame2021.com/sheep/v1/game/user_info?uid={user_id}", verify=False, headers=headers)
     print(response.json()['data'])
     wx_union_id = response.json()['data']['wx_open_id']
     return wx_union_id
